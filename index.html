@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_19.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valutazione stagioni teatrali — BWM</title>
+<link rel="stylesheet" href="./Valutazione stagioni teatrali — BWM_files/tabler-icons.min.css">
+<style>
+:root{
+  /* ── Sfondi: avorio caldo, mai bianco puro ── */
+  --bg:#f4f1ec;--bg-2:#eae5dd;--bg-3:#ded8cd;--surface:#fdfcfa;
+  /* ── Testo: tre livelli gerarchici (AAA/AA) ── */
+  --fg:#231f1a;--fg-2:#574f46;--fg-3:#6f675c;
+  --border:#ddd6cc;--border-2:#eae5dd;
+  /* ── Primario: bordeaux teatrale (bottoni, avanzamento) ── */
+  --primary:#8a1f3d;--primary-fg:#ffffff;
+  /* ── Best = VERDE (criterio più importante) ── */
+  --best:#137a3a;--best-bg:#dcfce7;--best-fg:#0f5f2c;
+  /* ── Worst = MAGENTA (criterio meno importante) ── */
+  --worst:#c026d3;--worst-bg:#fae8ff;--worst-fg:#a21caf;
+  /* ── Errore: rosso, solo per validazione ── */
+  --red:#b5271a;--red-bg:#f8e3e0;--red-fg:#9e2117;
+  /* ── Successo / coerenza ── */
+  --green:#137a3a;--green-bg:#dcfce7;--green-fg:#0f5f2c;
+  /* ── Info / inconsistenza moderata ── */
+  --orange-bg:#f6ebdf;--orange-fg:#8f470c;
+  /* ── Best/Worst usano blu generico solo come pill neutra ranking ── */
+  --blue:#1d4ed8;--blue-bg:#e4edf7;--blue-fg:#1a4f8c;
+  --pill-bg:#e4edf7;--pill-fg:#1a4f8c;
+  /* ── Dimensioni: 4 tinte vivaci (solo schermate criteri e tabella) ── */
+  --dim-1:#136b34;--dim-2:#1d4ed8;--dim-3:#7e22ce;--dim-4:#b03709;
+  /* ── Istogramma pesi: intensita' proporzionale al peso (vedi JS) ── */
+  --hover-row:#efe9e0;--drag-row:#e4edf7;
+  --shadow:rgba(60,40,20,.10);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1c20;--bg-2:#2a2e34;--bg-3:#3a3e44;--surface:#24272c;
+  --fg:#ece8e1;--fg-2:#bcb4a9;--fg-3:#938b80;
+  --border:#3a3e44;--border-2:#2a2e34;
+  --primary:#e0698a;--primary-fg:#1a1c20;
+  --best:#4ade80;--best-bg:#14331f;--best-fg:#86efac;
+  --worst:#e879f9;--worst-bg:#3b0a3f;--worst-fg:#f0abfc;
+  --red:#f0726a;--red-bg:#3a1f1c;--red-fg:#ffb3ad;
+  --green:#4ade80;--green-bg:#14331f;--green-fg:#86efac;
+  --orange-bg:#33271a;--orange-fg:#f0c79a;
+  --blue:#60a5fa;--blue-bg:#1e2c3d;--blue-fg:#a8d4ff;
+  --pill-bg:#1e2c3d;--pill-fg:#a8d4ff;
+  --dim-1:#4ade80;--dim-2:#60a5fa;--dim-3:#c084fc;--dim-4:#fb923c;
+  --hover-row:#22252a;--drag-row:#1e2c3d;
+  --shadow:rgba(0,0,0,.4);
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.5;padding:1.5rem;transition:background .2s,color .2s}
+.app{max-width:700px;margin:0 auto;padding:1rem 0}
+.progress{display:flex;gap:5px;margin-bottom:2rem}
+.pdot{height:3px;border-radius:2px;flex:1;background:var(--border);transition:background .3s}
+.pdot.done{background:var(--primary);opacity:.45}.pdot.active{background:var(--primary)}
+.nav{display:flex;justify-content:space-between;margin-top:2rem;gap:10px}
+.btn-p{background:var(--primary);color:var(--primary-fg);border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-p:hover{filter:brightness(1.12)}
+.btn-s{background:var(--bg-2);color:var(--fg);border:1px solid var(--border);border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer}
+.btn-s:hover{background:var(--bg-3)}
+.tag{font-size:11px;font-weight:600;color:var(--fg-3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:.4rem}
+h2{font-size:18px;font-weight:600;color:var(--fg);margin-bottom:.5rem}
+.sub{font-size:14px;color:var(--fg-2);line-height:1.65;margin-bottom:1.5rem}
+.time-badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--blue);background:var(--blue-bg);border-radius:20px;padding:5px 14px;margin-bottom:2rem}
+.dim-block{margin-bottom:1.2rem}
+.dim-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.crit-card{border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden}
+.crit-header{display:flex;align-items:center;gap:8px;padding:.75rem .9rem;cursor:pointer;transition:background .15s}
+.crit-header:hover{background:var(--bg-2)}
+.crit-name{font-size:13px;font-weight:500;flex:1;color:var(--fg)}
+.crit-toggle{font-size:12px;color:var(--fg-3);transition:transform .2s}
+.crit-toggle.open{transform:rotate(180deg)}
+.crit-detail{display:none;padding:.6rem .9rem;border-top:1px solid var(--border-2);background:var(--bg-2)}
+.crit-detail.open{display:block}
+.crit-detail p{font-size:12px;color:var(--fg-2);line-height:1.5}
+.table-wrap{overflow-x:auto;margin-bottom:1rem;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+thead tr{border-bottom:1px solid var(--border);background:var(--bg-2)}
+th{padding:4px;text-align:center;color:var(--fg-2);font-weight:500;font-size:10px;width:62px}
+th:first-child{width:58px;padding-left:8px}
+th:nth-child(2){text-align:left;width:82px;font-size:11px}
+th.vert{height:88px;vertical-align:bottom;padding:0 4px 6px}
+th.vert .th-name{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-size:10px;font-weight:500;color:var(--fg);cursor:help;display:inline-block}
+td{padding:7px 4px;text-align:center;border-bottom:1px solid var(--border-2);font-size:11px;color:var(--fg)}
+td:first-child{padding-left:8px;text-align:left}
+td:nth-child(2){text-align:left;font-weight:600;font-size:12px}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:var(--hover-row)}
+tbody tr.dragging{opacity:.35}
+tbody tr.drag-over{background:var(--drag-row);outline:2px solid var(--blue);outline-offset:-1px}
+.rank-cell{display:flex;align-items:center;gap:4px}
+.rank-pill{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--pill-bg);color:var(--pill-fg);font-size:10px;font-weight:600;flex-shrink:0;cursor:grab}
+.rank-arrows{display:flex;flex-direction:column;gap:1px}
+.rk-btn{width:18px;height:14px;border:1px solid var(--border);background:var(--surface);color:var(--fg-2);border-radius:3px;font-size:8px;line-height:1;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+.rk-btn:hover{background:var(--blue-bg);color:var(--blue);border-color:var(--blue)}
+.rk-btn:disabled{opacity:.3;cursor:default}
+.hint{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-3);margin-bottom:.75rem}
+.tooltip{position:fixed;z-index:1000;max-width:220px;background:var(--fg);color:var(--bg);padding:8px 11px;border-radius:6px;font-size:12px;line-height:1.45;pointer-events:none;opacity:0;transition:opacity .12s;box-shadow:0 2px 12px var(--shadow)}
+.tooltip.show{opacity:1}
+.bw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:1.5rem}
+.bw-card{border:1.5px solid var(--border);border-radius:8px;padding:.75rem;background:var(--surface);text-align:center;cursor:pointer;transition:all .15s}
+.bw-card:hover{background:var(--bg-2)}
+.bw-card.sel-best{border-color:var(--best);background:var(--best-bg)}
+.bw-card.sel-worst{border-color:var(--worst);background:var(--worst-bg)}
+.bw-card-name{font-size:12px;font-weight:500;display:block;margin-bottom:4px;color:var(--fg)}
+.bw-tag{font-size:11px;padding:2px 8px;border-radius:20px;display:none}
+.best-tag{background:var(--best-bg);color:var(--best-fg);display:inline-block}
+.worst-tag{background:var(--worst-bg);color:var(--worst-fg);display:inline-block}
+.bw-reminder{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
+.bw-reminder-chip{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;flex:1;min-width:180px;border:1.5px solid transparent}
+.bw-reminder-chip.chip-best{background:var(--best-bg);border-color:var(--best)}
+.bw-reminder-chip.chip-worst{background:var(--worst-bg);border-color:var(--worst)}
+.chip-best .chip-label,.chip-best .chip-name{color:var(--best-fg)}
+.chip-worst .chip-label,.chip-worst .chip-name{color:var(--worst-fg)}
+.chip-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.8;margin-bottom:2px}
+.chip-name{font-size:13px;font-weight:600}
+.comp-block{margin-bottom:14px;padding:14px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.comp-question{font-size:14px;color:var(--fg);line-height:1.6;margin-bottom:10px}
+.slider-wrap{display:flex;flex-direction:column;gap:4px}
+.slider-row{display:flex;align-items:center;gap:10px}
+.slider-track{position:relative;flex:1;height:8px;background:var(--bg-3);border-radius:4px;cursor:pointer}
+.slider-fill{position:absolute;left:0;top:0;height:8px;border-radius:4px;pointer-events:none}
+.slider-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 1px 5px var(--shadow);cursor:grab}
+.slider-thumb:hover{box-shadow:0 2px 8px var(--shadow)}
+.slider-thumb.dragging-thumb{cursor:grabbing}
+.slider-val{font-size:15px;font-weight:700;min-width:20px;text-align:center}
+.slider-hint{display:flex;justify-content:space-between;font-size:10px;color:var(--fg-3);font-style:italic}
+.info-box{background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--fg-2);line-height:1.7;margin-bottom:1.5rem}
+.err{font-size:12px;color:var(--red);margin-top:6px}
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;text-align:center}
+.spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:1.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-label{font-size:15px;font-weight:600;color:var(--fg);margin-bottom:.5rem}
+.loading-sub{font-size:13px;color:var(--fg-3)}
+.loading-steps{margin-top:1.5rem;display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px}
+.lstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--fg-2);padding:8px 12px;border-radius:8px;background:var(--bg-2);border:1px solid var(--border)}
+.lstep.done{color:var(--green-fg);background:var(--green-bg);border-color:transparent}
+.lstep.active{color:var(--blue-fg);background:var(--blue-bg);border-color:transparent}
+.lstep-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.lstep.done .lstep-dot{background:var(--green)}
+.lstep.active .lstep-dot{background:var(--blue);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.res-table-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.5rem}
+.res-table{width:100%;border-collapse:collapse;font-size:13px}
+.res-table th{padding:10px 12px;text-align:center;color:var(--fg-2);font-weight:500;font-size:12px;border-bottom:1px solid var(--border);background:var(--bg-2)}
+.res-table th:first-child{text-align:left}
+.res-table td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--border-2);color:var(--fg)}
+.res-table tbody tr:last-child td{border-bottom:none}
+.res-table td:first-child{text-align:left;font-weight:600}
+.arrow-up{color:var(--green);font-weight:700}
+.arrow-down{color:var(--red);font-weight:700}
+.arrow-eq{color:var(--fg-3)}
+.rank-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:600}
+.rn-best{background:var(--green-bg);color:var(--green-fg)}
+.rn-mid{background:var(--blue-bg);color:var(--blue-fg)}
+.rn-low{background:var(--bg-2);color:var(--fg-3)}
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+.w-bar{margin-bottom:10px}
+.w-bar-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;color:var(--fg)}
+.w-track{height:8px;background:var(--bg-3);border-radius:4px;overflow:hidden}
+.w-fill{height:100%;border-radius:4px}
+.result-title{font-size:14px;font-weight:600;color:var(--fg);margin-bottom:10px}
+.cr-block{margin-bottom:1rem}
+.cr-block-title{font-size:11px;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.incons-box{border-radius:8px;padding:10px 14px;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;border:1px solid transparent}
+.incons-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.form-field{margin-bottom:1rem}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--fg);margin-bottom:5px}
+.form-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;background:var(--surface);color:var(--fg)}
+.form-input:focus{outline:none;border-color:var(--primary)}
+.form-input::placeholder{color:var(--fg-3)}
+.consent-row{display:flex;align-items:flex-start;gap:10px;margin:1.2rem 0 .5rem;font-size:13px;color:var(--fg-2);line-height:1.5;cursor:pointer}
+.consent-row input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:var(--primary)}
+.btn-dl{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--fg);border:1px solid var(--border);border-radius:8px;padding:10px 18px;font-size:13px;cursor:pointer}
+.btn-dl:hover{background:var(--bg-2)}
+.send-note{font-size:12px;margin-top:10px;display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="progress" id="progress"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+  <div id="screens"><div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><p class="sub" style="max-width:480px;margin:1rem auto 0;font-size:12px;color:var(--fg-3)">Le risposte saranno raccolte in forma anonima e utilizzate esclusivamente per finalità di ricerca.</p><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div></div>
+</div>
+<div class="tooltip" id="tt"></div>
+<script>
+function solveBWM_Exact(n,best,worst,b2o,o2w){
+  if(n<2)return{w:[1],xi:0,CR:0};
+  const N=n+1,xii=n,ineq=[];
+  for(let j=0;j<n;j++){
+    if(j===best)continue;const a=b2o[j]||1;
+    const r1=Array(N).fill(0);r1[best]=1;r1[j]=-a;r1[xii]=-1;ineq.push(r1);
+    const r2=Array(N).fill(0);r2[best]=-1;r2[j]=a;r2[xii]=-1;ineq.push(r2);
+  }
+  for(let j=0;j<n;j++){
+    if(j===worst)continue;const a=(j===best)?(b2o[worst]||1):(o2w[j]||1);
+    const r3=Array(N).fill(0);r3[j]=1;r3[worst]=-a;r3[xii]=-1;ineq.push(r3);
+    const r4=Array(N).fill(0);r4[j]=-1;r4[worst]=a;r4[xii]=-1;ineq.push(r4);
+  }
+  const nI=ineq.length,aIdx=N+nI,TOT=N+nI+1,BM=1e5,m=nI+1;
+  const T=Array.from({length:m},()=>Array(TOT+1).fill(0));
+  const bas=Array(m).fill(0);
+  for(let i=0;i<nI;i++){for(let j=0;j<N;j++)T[i][j]=ineq[i][j];T[i][N+i]=1;bas[i]=N+i;}
+  for(let j=0;j<n;j++)T[m-1][j]=1;
+  T[m-1][aIdx]=1;T[m-1][TOT]=1;bas[m-1]=aIdx;
+  const obj=Array(TOT+1).fill(0);obj[xii]=1;obj[aIdx]=BM;
+  for(let j=0;j<=TOT;j++)obj[j]-=BM*T[m-1][j];
+  for(let it=0;it<50000;it++){
+    let en=-1;for(let j=0;j<TOT;j++){if(obj[j]<-1e-9){en=j;break;}}if(en===-1)break;
+    let mR=Infinity,lv=-1;
+    for(let i=0;i<m;i++){if(T[i][en]>1e-9){const r=T[i][TOT]/T[i][en];if(r<mR-1e-12){mR=r;lv=i;}else if(Math.abs(r-mR)<1e-12&&lv>=0&&bas[i]<bas[lv])lv=i;}}
+    if(lv===-1)break;
+    bas[lv]=en;const pv=T[lv][en];for(let j=0;j<=TOT;j++)T[lv][j]/=pv;
+    for(let i=0;i<m;i++){if(i===lv)continue;const f=T[i][en];if(Math.abs(f)<1e-13)continue;for(let j=0;j<=TOT;j++)T[i][j]-=f*T[lv][j];}
+    const fo=obj[en];if(Math.abs(fo)>=1e-13)for(let j=0;j<=TOT;j++)obj[j]-=fo*T[lv][j];
+  }
+  const x=Array(N).fill(0);for(let i=0;i<m;i++)if(bas[i]<N)x[bas[i]]=Math.max(0,T[i][TOT]);
+  const w=x.slice(0,n),xi=Math.max(0,x[xii]);
+  const ws=w.reduce((s,v)=>s+v,0);if(ws>1e-10)w.forEach((_,i)=>w[i]/=ws);else w.fill(1/n);
+  // Linear BWM (Rezaei 2016): xi* e' usato direttamente come indicatore di
+  // inconsistenza. NON va diviso per il consistency index della tabella 2015
+  // (quella deriva dal modello NON lineare a rapporti). Cfr. slide 21 ufficiali:
+  // "the xi^L of Model (5) should not be divided by the consistency index values".
+  return{w,xi};
+}
+
+const DIMS=[
+  {label:'Sostenibilità economica',icon:'ti-coin',color:'var(--dim-1)',criteria:[
+    {name:'Margine operativo',     desc:'% del valore della produzione trattenuta dopo i costi operativi. Indica l\'efficienza economica della stagione.'},
+    {name:'Autonomia finanziaria', desc:'% dei ricavi generata autonomamente, al netto dei contributi pubblici. Misura l\'indipendenza dai finanziamenti esterni.'}
+  ]},
+  {label:'Domanda e attrattività',icon:'ti-users',color:'var(--dim-2)',criteria:[
+    {name:'Tasso di occupazione',   desc:'% di posti occupati sul totale della capienza disponibile. Riflette la capacità di riempire la sala.'},
+    {name:'Tasso di fidelizzazione',desc:'% degli spettatori paganti che ha scelto il formato abbonamento. Indica la quota di pubblico ricorrente.'}
+  ]},
+  {label:'Innovazione artistica',icon:'ti-sparkles',color:'var(--dim-3)',criteria:[
+    {name:'Quota nuove produzioni',   desc:'% di titoli realizzati con nuovi allestimenti sul totale della programmazione. Misura lo sforzo produttivo originale.'},
+    {name:'Repertorio contemporaneo', desc:'% di titoli di autori viventi o degli ultimi decenni sul totale del repertorio proposto.'}
+  ]},
+  {label:'Impatto sociale',icon:'ti-heart',color:'var(--dim-4)',criteria:[
+    {name:'Accessibilità economica',   desc:'% di spettacoli con politiche di prezzo agevolato (riduzioni, biglietti sociali, tariffe per giovani o categorie svantaggiate).'},
+    {name:'Coinvolgimento pubblico',   desc:'% di produzioni accompagnate da attività di mediazione culturale o iniziative di partecipazione sul territorio (incontri, laboratori, progetti con scuole o comunità).'}
+  ]}
+];
+const BC=DIMS.flatMap(d=>d.criteria.map(c=>({...c,color:d.color})));
+const SEASONS=['Stagione A','Stagione B','Stagione C','Stagione D','Stagione E','Stagione F'];
+const PERF=[
+  [6,62,82,28,22,15,35,25],
+  [1,44,70,24,50,52,40,48],
+  [2,50,76,35,30,35,68,62],
+  [5,65,73,40,18,20,30,28],
+  [1,45,62,16,48,55,50,62],
+  [3,55,77,32,40,42,46,44],
+];
+const TOTAL=9;
+let S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},
+  info:{teatro:'',ruolo:'',esperienza:''},consenso:false,tStart:Date.now()};
+const FORM_ACTION='https://docs.google.com/forms/d/e/1FAIpQLSffHfpJW-Z5GF68YGxa0fLx5NbFmiTfhxdlTVbN9kdfUbH7XQ/formResponse';
+const FORM_FIELDS={nome:'entry.893010220',teatro:'entry.382483728',ruolo:'entry.892005640',
+  esperienza:'entry.2087124831',ranking:'entry.2088025476',best:'entry.1055306693',worst:'entry.799534511',
+  b2o:'entry.479085269',o2w:'entry.687423769',pesi:'entry.172011053',xi:'entry.376070899',
+  rankingBWM:'entry.1026636522',data:'entry.284503463',tempo:'entry.1158652575'};
+let dragSrc=null;
+function getCrit(){return BC;}
+function mkProg(){return Array.from({length:TOTAL},(_,i)=>{let c='pdot';if(i<S.screen)c+=' done';else if(i===S.screen)c+=' active';return`<div class="${c}"></div>`;}).join('');}
+function nav(back=true,lbl='Avanti →'){const b=back?`<button class="btn-s" id="prev-btn">← Indietro</button>`:`<div></div>`;return`<div class="nav">${b}<button class="btn-p" id="next-btn">${lbl}</button></div>`;}
+function reminder(cr){
+  const bn=S.best>=0?cr[S.best].name:'—';
+  const wn=S.worst>=0?cr[S.worst].name:'—';
+  return`<div class="bw-reminder">
+    <div class="bw-reminder-chip chip-best"><div><div class="chip-label">★ Più importante (Best)</div><div class="chip-name">${bn}</div></div></div>
+    <div class="bw-reminder-chip chip-worst"><div><div class="chip-label">✕ Meno importante (Worst)</div><div class="chip-name">${wn}</div></div></div>
+  </div>`;
+}
+function mkSlider(idx,val,color){const pct=((val-1)/8)*100;return`<div class="slider-wrap"><div class="slider-row"><div class="slider-track" data-idx="${idx}"><div class="slider-fill" style="width:${pct}%;background:${color}"></div><div class="slider-thumb" style="left:${pct}%;background:${color}" data-idx="${idx}"></div></div><span class="slider-val" style="color:${color}" id="sv-${idx}">${val}</span></div><div class="slider-hint"><span>1 — uguale importanza</span><span>9 — assolutamente più importante</span></div></div>`;}
+
+function sData(){return`<p class="tag">Prima di iniziare</p>
+  <h2>Alcune informazioni sul teatro</h2>
+  <p class="sub">Le risposte saranno utilizzate esclusivamente per finalità di ricerca. I dati saranno trattati in forma riservata e presentati in modo aggregato nell'elaborato.</p>
+  <div class="form-field"><label class="form-label">Tipo di teatro / organizzazione</label><input class="form-input" id="f-teatro" type="text" value="${S.info.teatro}" placeholder="Es. teatro di tradizione, stabile, fondazione..."></div>
+  <div class="form-field"><label class="form-label">Ruolo</label><input class="form-input" id="f-ruolo" type="text" value="${S.info.ruolo}" placeholder="Es. direttore artistico, manager..."></div>
+  <div class="form-field"><label class="form-label">Anni di esperienza nel settore</label><input class="form-input" id="f-esperienza" type="text" value="${S.info.esperienza}" placeholder="Es. 12"></div>
+  <label class="consent-row"><input type="checkbox" id="f-consenso" ${S.consenso?'checked':''}><span>Acconsento al trattamento dei dati forniti per finalità di ricerca nell'ambito di questa tesi.</span></label>
+  <div id="data-err" class="err" style="display:none">Compila i campi obbligatori e fornisci il consenso per continuare.</div>
+  ${nav()}`;}
+
+function s0(){return`<div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><p class="sub" style="max-width:480px;margin:1rem auto 0;font-size:12px;color:var(--fg-3)">Le risposte saranno raccolte in forma anonima e utilizzate esclusivamente per finalità di ricerca.</p><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div>`;}
+
+function s1(){return`<p class="tag">Passo 1 — I criteri</p>
+  <h2>Criteri di valutazione</h2>
+  <p class="sub">Di seguito sono presentate alcune dimensioni che possono influenzare la valutazione di una stagione teatrale. I criteri proposti serviranno come base per le attività successive di confronto e prioritizzazione.</p>
+  ${DIMS.map((d,di)=>`<div class="dim-block"><div class="dim-label" style="color:${d.color}"><i class="ti ${d.icon}" style="margin-right:5px"></i>${d.label}</div><div class="crit-grid">${d.criteria.map((c,ci)=>{const idx=di*2+ci;return`<div class="crit-card"><div class="crit-header" data-ci="${idx}"><span class="crit-name">${c.name}</span><i class="ti ti-chevron-down crit-toggle" id="tog-${idx}"></i></div><div class="crit-detail" id="det-${idx}"><p>${c.desc}</p></div></div>`;}).join('')}</div></div>`).join('')}
+  ${nav(false)}`;}
+
+function s2(){const cr=getCrit();return`<p class="tag">Passo 2 — Ranking intuitivo</p>
+  <h2>Ranking intuitivo delle stagioni</h2>
+  <p class="sub">Osserva i dati nella tabella, poi trascina le righe per ordinare le stagioni dalla migliore alla peggiore secondo il tuo giudizio complessivo.</p>
+  <div class="hint"><i class="ti ti-arrows-sort"></i> Trascina le righe oppure usa le frecce ▲▼ — riga 1 = migliore</div>
+  <div class="table-wrap"><table><thead><tr><th></th><th>Stagione</th>${cr.map(c=>`<th class="vert"><span class="th-name" data-desc="${c.desc.replace(/"/g,'&quot;')}">${c.name}</span></th>`).join('')}</tr></thead><tbody id="rtbody"></tbody></table></div>
+  ${nav()}`;}
+
+function moveRow(rank,dir){const to=rank+dir;if(to<0||to>=S.rankOrder.length)return;const t=S.rankOrder[rank];S.rankOrder[rank]=S.rankOrder[to];S.rankOrder[to]=t;renderRows();}
+
+function renderRows(){
+  const tb=document.getElementById('rtbody');if(!tb)return;
+  const cr=getCrit(),last=S.rankOrder.length-1;
+  tb.innerHTML=S.rankOrder.map((si,rk)=>`<tr draggable="true" data-rank="${rk}" data-si="${si}"><td><div class="rank-cell"><span class="rank-pill" title="Trascina">${rk+1}</span><div class="rank-arrows"><button class="rk-btn rk-up" data-rank="${rk}" ${rk===0?'disabled':''} aria-label="Su">▲</button><button class="rk-btn rk-dn" data-rank="${rk}" ${rk===last?'disabled':''} aria-label="Giù">▼</button></div></div></td><td>${SEASONS[si]}</td>${cr.map((c,ci)=>`<td>${PERF[si][ci]}%</td>`).join('')}</tr>`).join('');
+  tb.querySelectorAll('.rk-up').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();moveRow(+b.dataset.rank,-1);}));
+  tb.querySelectorAll('.rk-dn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();moveRow(+b.dataset.rank,1);}));
+  tb.querySelectorAll('tr').forEach(row=>{
+    row.addEventListener('dragstart',()=>{dragSrc=+row.dataset.rank;setTimeout(()=>row.classList.add('dragging'),0)});
+    row.addEventListener('dragend',()=>{row.classList.remove('dragging');tb.querySelectorAll('tr').forEach(r=>r.classList.remove('drag-over'))});
+    row.addEventListener('dragover',e=>{e.preventDefault();tb.querySelectorAll('tr').forEach(r=>r.classList.remove('drag-over'));row.classList.add('drag-over')});
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{e.preventDefault();row.classList.remove('drag-over');const to=+row.dataset.rank;if(dragSrc!==null&&dragSrc!==to){S.rankOrder.splice(to,0,S.rankOrder.splice(dragSrc,1)[0]);renderRows();}dragSrc=null;});
+  });
+}
+
+function s3(){const cr=getCrit();return`<p class="tag">Passo 3 — Best-Worst Method</p>
+  <h2>Best-Worst Method</h2>
+  <div class="info-box">Il <strong>Best-Worst Method (BWM)</strong> è una tecnica di analisi multicriterio che consente di determinare il peso relativo di un insieme di criteri attraverso un numero ridotto di confronti a coppie. A differenza di altri metodi, richiede solo di identificare il criterio più importante (<strong>Best</strong>) e quello meno importante (<strong>Worst</strong>), confrontandoli con tutti gli altri su una scala da 1 a 9.<br><br>Al termine verrà calcolato il <strong>tasso di inconsistenza</strong>, un indice che misura la coerenza interna delle tue valutazioni.</div>
+  <p class="sub">Seleziona il criterio che ritieni <strong>più importante</strong> (Best) e quello <strong>meno importante</strong> (Worst) per la valutazione di una stagione teatrale.</p>
+  <div class="bw-grid" id="bw-grid">${cr.map((c,i)=>`<div class="bw-card" data-ci="${i}"><span class="bw-card-name">${c.name}</span><span class="bw-tag" id="bwt-${i}"></span></div>`).join('')}</div>
+  <div id="bw-err" class="err" style="display:none">Seleziona un criterio Best e uno Worst diversi per continuare.</div>
+  ${nav()}`;}
+
+function s4(){const cr=getCrit(),bn=S.best>=0?cr[S.best].name:'[Best]',bc='var(--best)';return`<p class="tag">Passo 4 — Confronti Best</p>
+  <h2>Confronti con il criterio più importante</h2>
+  <p class="sub">Per ciascun criterio, indica quanto <strong style="color:${bc}">${bn}</strong> è importante rispetto ad esso. Usa lo slider: 1 significa uguale importanza, 9 significa che ${bn} è assolutamente più importante.</p>
+  ${reminder(cr)}
+  ${cr.map((c,i)=>{if(i===S.best)return'';return`<div class="comp-block"><div class="comp-question">Quanto è importante <strong style="color:${bc}">${bn}</strong> rispetto a <strong>${c.name}</strong>?</div>${mkSlider('b'+i,S.b2o[i]||1,bc)}</div>`;}).join('')}
+  ${nav()}`;}
+
+function s5(){const cr=getCrit(),wn=S.worst>=0?cr[S.worst].name:'[Worst]',wc='var(--worst)';return`<p class="tag">Passo 5 — Confronti Worst</p>
+  <h2>Confronti con il criterio meno importante</h2>
+  <p class="sub">Per ciascun criterio, indica quanto esso è importante rispetto a <strong style="color:${wc}">${wn}</strong>. Usa lo slider: 1 significa uguale importanza, 9 significa che il criterio è assolutamente più importante del Worst.</p>
+  ${reminder(cr)}
+  ${cr.map((c,i)=>{if(i===S.worst)return'';return`<div class="comp-block"><div class="comp-question">Quanto è importante <strong>${c.name}</strong> rispetto a <strong style="color:${wc}">${wn}</strong>?</div>${mkSlider('w'+i,S.o2w[i]||1,wc)}</div>`;}).join('')}
+  ${nav()}`;}
+
+function s6(){return`<div class="loading-screen"><div class="spinner"></div><p class="loading-label">Elaborazione delle valutazioni...</p><p class="loading-sub">Risoluzione LP esatta secondo Rezaei (2015/2016)</p><div class="loading-steps"><div class="lstep done" id="ls1"><span class="lstep-dot"></span> Raccolta preferenze completata</div><div class="lstep active" id="ls2"><span class="lstep-dot"></span> Costruzione tableau simplex (Big-M)</div><div class="lstep" id="ls3"><span class="lstep-dot"></span> Ottimizzazione LP — regola di Bland</div><div class="lstep" id="ls4"><span class="lstep-dot"></span> Calcolo ξ* e tasso di inconsistenza CR</div></div></div>`;}
+
+function s7(){
+  const cr=getCrit(),n=cr.length;
+  const{w,xi}=solveBWM_Exact(n,S.best,S.worst,S.b2o,S.o2w);
+  S.weights=w;
+  const maxC=PERF[0].map((_,ci)=>Math.max(...PERF.map(r=>r[ci])));
+  SEASONS.forEach((_,ai)=>{let sc=0;for(let ci=0;ci<n;ci++)sc+=(w[ci]||0)*(PERF[ai][ci]/maxC[ci]);S.scores[ai]=sc;});
+  const intRank={};S.rankOrder.forEach((si,pos)=>{intRank[si]=pos+1});
+  const bwmSorted=SEASONS.map((_,i)=>({si:i,score:S.scores[i]})).sort((a,b)=>b.score-a.score);
+  const bwmRank={};bwmSorted.forEach((x,pos)=>{bwmRank[x.si]=pos+1});
+  const rows=S.rankOrder.map(si=>{const ir=intRank[si],br=bwmRank[si],df=ir-br;let arrow='—',cls='arrow-eq';if(df>0){arrow=`↑${df}`;cls='arrow-up';}else if(df<0){arrow=`↓${Math.abs(df)}`;cls='arrow-down';}return`<tr><td>${SEASONS[si]}</td><td><span class="rank-num ${ir===1?'rn-best':ir<=3?'rn-mid':'rn-low'}">${ir}</span></td><td><span class="rank-num ${br===1?'rn-best':br<=3?'rn-mid':'rn-low'}">${br}</span></td><td><span class="${cls}">${arrow}</span></td></tr>`;}).join('');
+  // Soglie interpretative per xi* nel Linear BWM. Rezaei (2016) non pubblica una
+  // tabella di soglie per xi^L, quindi queste sono euristiche pragmatiche: il
+  // massimo xi^L possibile e' ~0.34 (a_BW=9), e l'esempio ufficiale di Rezaei
+  // (auto, modello lineare) riporta xi^L*=0.061 come risultato di buona coerenza.
+  let bg,tc,dot,lbl;
+  if(xi<0.10){bg='var(--green-bg)';tc='var(--green-fg)';dot='var(--green)';lbl='Inconsistenza bassa';}
+  else if(xi<0.20){bg='var(--orange-bg)';tc='var(--orange-fg)';dot='var(--worst)';lbl='Inconsistenza moderata';}
+  else{bg='var(--red-bg)';tc='var(--red-fg)';dot='var(--red)';lbl='Inconsistenza elevata';}
+  const maxW=Math.max(...w);
+  const darkMode=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const barColor=(wv)=>{const f=maxW>0?wv/maxW:0;return darkMode?`hsl(342 70% ${42+28*f}%)`:`hsl(340 58% ${64-32*f}%)`;};
+  // ── Record completo da inviare al Form e scaricare come backup ──
+  const critNames=cr.map(c=>c.name);
+  const rec={
+    teatro:S.info.teatro, ruolo:S.info.ruolo, esperienza:S.info.esperienza,
+    ranking:S.rankOrder.map(si=>SEASONS[si]).join(' > '),
+    best:critNames[S.best]||'', worst:critNames[S.worst]||'',
+    b2o:cr.map((c,i)=>i===S.best?null:`${c.name}=${S.b2o[i]||1}`).filter(Boolean).join('; '),
+    o2w:cr.map((c,i)=>i===S.worst?null:`${c.name}=${S.o2w[i]||1}`).filter(Boolean).join('; '),
+    pesi:cr.map((c,i)=>`${c.name}=${(w[i]*100).toFixed(2)}%`).join('; '),
+    xi:xi.toFixed(4),
+    rankingBWM:bwmSorted.map(x=>SEASONS[x.si]).join(' > '),
+    data:new Date().toLocaleString('it-IT'),
+    tempo:Math.round((Date.now()-S.tStart)/1000)+' s'
+  };
+  S._record=rec;
+  if(!S._sent){S._sent=true; sendToForm(rec);}
+  return`<p class="tag">Risultati</p><h2>Risultati della valutazione</h2>
+  <p class="sub">Di seguito trovi il confronto tra il ranking intuitivo che hai espresso in precedenza e il ranking calcolato dal Best-Worst Method sulla base dei pesi che hai assegnato ai criteri.</p>
+  <div class="incons-box" style="background:${bg}"><div class="incons-dot" style="background:${dot}"></div><span style="font-size:13px;color:${tc}">Indice di inconsistenza ξ* = <strong>${xi.toFixed(4)}</strong> — ${lbl}</span></div>
+  <div class="res-table-wrap"><table class="res-table"><thead><tr><th style="text-align:left">Stagione</th><th>Ranking intuitivo</th><th>Ranking BWM</th><th>Differenza</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="divider"></div><div class="result-title">Pesi dei criteri</div>
+  ${DIMS.map((d,di)=>`<div class="cr-block"><div class="cr-block-title" style="color:var(--fg-3)"><i class="ti ${d.icon}" style="margin-right:4px"></i>${d.label}</div>${d.criteria.map((c,ci)=>{const idx=di*2+ci;const wv=w[idx]||0;return`<div class="w-bar"><div class="w-bar-top"><span>${c.name}</span><span style="font-weight:600">${(wv*100).toFixed(2)}%</span></div><div class="w-track"><div class="w-fill" style="width:${(wv/maxW*100).toFixed(1)}%;background:${barColor(wv)}"></div></div></div>`;}).join('')}</div>`).join('')}
+  <div class="divider"></div>
+  <div class="send-note" id="send-status" style="color:var(--fg-3)"><i class="ti ti-loader"></i> Invio delle risposte in corso…</div>
+  <p class="sub" style="font-size:12px;margin:8px 0 12px">Se l'invio automatico non andasse a buon fine, puoi scaricare le tue risposte e inviarle al ricercatore.</p>
+  <div class="nav"><button class="btn-dl" id="dl-btn"><i class="ti ti-download"></i> Scarica le mie risposte</button><button class="btn-s" id="restart-btn">Ricomincia</button></div>`;
+}
+
+function sendToForm(rec){
+  const data=new FormData();
+  data.append(FORM_FIELDS.teatro,rec.teatro);
+  data.append(FORM_FIELDS.ruolo,rec.ruolo);
+  data.append(FORM_FIELDS.esperienza,rec.esperienza);
+  data.append(FORM_FIELDS.ranking,rec.ranking);
+  data.append(FORM_FIELDS.best,rec.best);
+  data.append(FORM_FIELDS.worst,rec.worst);
+  data.append(FORM_FIELDS.b2o,rec.b2o);
+  data.append(FORM_FIELDS.o2w,rec.o2w);
+  data.append(FORM_FIELDS.pesi,rec.pesi);
+  data.append(FORM_FIELDS.xi,rec.xi);
+  data.append(FORM_FIELDS.rankingBWM,rec.rankingBWM);
+  data.append(FORM_FIELDS.data,rec.data);
+  data.append(FORM_FIELDS.tempo,rec.tempo);
+  // Google Forms non consente lettura della risposta (CORS): invio no-cors.
+  fetch(FORM_ACTION,{method:'POST',mode:'no-cors',body:data})
+    .then(()=>updateSendStatus(true))
+    .catch(()=>updateSendStatus(false));
+}
+function updateSendStatus(ok){
+  const el=document.getElementById('send-status');if(!el)return;
+  if(ok){el.style.color='var(--green-fg)';el.innerHTML='<i class="ti ti-circle-check"></i> Risposte inviate. Grazie per la partecipazione!';}
+  else{el.style.color='var(--red-fg)';el.innerHTML='<i class="ti ti-alert-circle"></i> Invio automatico non riuscito: scarica le risposte e inviale al ricercatore.';}
+}
+function downloadRecord(){
+  const r=S._record;if(!r)return;
+  const lines=[
+    'QUESTIONARIO BWM — STAGIONI TEATRALI','',
+    'Tipo di teatro: '+r.teatro,'Ruolo: '+r.ruolo,'Anni di esperienza: '+r.esperienza,'',
+    'Ranking intuitivo: '+r.ranking,'Criterio Best: '+r.best,'Criterio Worst: '+r.worst,'',
+    'Confronti Best-to-Others: '+r.b2o,'Confronti Others-to-Worst: '+r.o2w,'',
+    'Pesi finali: '+r.pesi,'Indice di inconsistenza xi*: '+r.xi,'Ranking BWM: '+r.rankingBWM,'',
+    'Data e ora: '+r.data,'Tempo di compilazione: '+r.tempo
+  ];
+  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='risposte_bwm_'+Date.now()+'.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function getScreen(i){return[s0,sData,s1,s2,s3,s4,s5,s6,s7][i]();}
+function render(){document.getElementById('progress').innerHTML=mkProg();document.getElementById('screens').innerHTML=getScreen(S.screen);if(S.screen===3){renderRows();bindHeaderTooltips();}if(S.screen===7)animateLoading();bindEvents();}
+function animateLoading(){const st=['ls1','ls2','ls3','ls4'];let c=1;const iv=setInterval(()=>{if(c>=st.length){clearInterval(iv);setTimeout(()=>{S.screen++;render();},600);return;}document.getElementById(st[c-1])?.classList.replace('active','done');document.getElementById(st[c])?.classList.add('active');c++;},900);}
+function bindHeaderTooltips(){
+  const tt=document.getElementById('tt');if(!tt)return;
+  document.querySelectorAll('.th-name').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{tt.textContent=el.dataset.desc;tt.classList.add('show');});
+    el.addEventListener('mousemove',e=>{tt.style.left=Math.min(e.clientX+12,window.innerWidth-235)+'px';tt.style.top=(e.clientY+14)+'px';});
+    el.addEventListener('mouseleave',()=>tt.classList.remove('show'));
+  });
+}
+function bindSliders(){
+  document.querySelectorAll('.slider-thumb').forEach(th=>{
+    let dr=false;
+    const up=(cx)=>{const tr=th.parentElement;const r=tr.getBoundingClientRect();const p=Math.max(0,Math.min(1,(cx-r.left)/r.width));const v=Math.round(1+p*8);const idx=th.dataset.idx;const p2=((v-1)/8)*100;th.style.left=p2+'%';tr.querySelector('.slider-fill').style.width=p2+'%';const el=document.getElementById('sv-'+idx);if(el)el.textContent=v;if(idx.startsWith('b'))S.b2o[+idx.slice(1)]=v;else S.o2w[+idx.slice(1)]=v;};
+    th.addEventListener('mousedown',e=>{e.preventDefault();dr=true;th.classList.add('dragging-thumb');});
+    document.addEventListener('mousemove',e=>{if(dr)up(e.clientX);});
+    document.addEventListener('mouseup',()=>{dr=false;th.classList.remove('dragging-thumb');});
+    th.addEventListener('touchstart',e=>{e.preventDefault();dr=true;},{passive:false});
+    document.addEventListener('touchmove',e=>{if(dr)up(e.touches[0].clientX);},{passive:true});
+    document.addEventListener('touchend',()=>{dr=false;});
+  });
+  document.querySelectorAll('.slider-track').forEach(tr=>{tr.addEventListener('click',e=>{if(e.target.classList.contains('slider-thumb'))return;const th=tr.querySelector('.slider-thumb');const r=tr.getBoundingClientRect();const v=Math.round(1+Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*8);const idx=th.dataset.idx;const p2=((v-1)/8)*100;th.style.left=p2+'%';tr.querySelector('.slider-fill').style.width=p2+'%';const el=document.getElementById('sv-'+idx);if(el)el.textContent=v;if(idx.startsWith('b'))S.b2o[+idx.slice(1)]=v;else S.o2w[+idx.slice(1)]=v;});});
+}
+function bindEvents(){
+  document.getElementById('next-btn')?.addEventListener('click',goNext);
+  document.getElementById('prev-btn')?.addEventListener('click',()=>{S.screen--;render();});
+  document.getElementById('restart-btn')?.addEventListener('click',()=>{S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},info:{teatro:'',ruolo:'',esperienza:''},consenso:false,tStart:Date.now()};render();});
+  document.getElementById('dl-btn')?.addEventListener('click',downloadRecord);
+  document.querySelectorAll('.crit-header').forEach(h=>h.addEventListener('click',()=>{const i=+h.dataset.ci;document.getElementById(`det-${i}`).classList.toggle('open');document.getElementById(`tog-${i}`).classList.toggle('open');}));
+  document.querySelectorAll('.bw-card').forEach(card=>{card.addEventListener('click',()=>{const i=+card.dataset.ci;if(S.best===i)S.best=-1;else if(S.worst===i)S.worst=-1;else if(S.best===-1)S.best=i;else if(S.worst===-1)S.worst=i;else S.best=i;updateBW();});});
+  if(S.screen===5||S.screen===6)bindSliders();
+}
+function updateBW(){document.querySelectorAll('.bw-card').forEach(card=>{const i=+card.dataset.ci;const t=document.getElementById(`bwt-${i}`);card.classList.remove('sel-best','sel-worst');t.className='bw-tag';t.textContent='';if(i===S.best){card.classList.add('sel-best');t.classList.add('best-tag');t.textContent='Best';}else if(i===S.worst){card.classList.add('sel-worst');t.classList.add('worst-tag');t.textContent='Worst';}});}
+function goNext(){
+  if(S.screen===1){ // schermata dati intervistato
+    S.info.teatro=document.getElementById('f-teatro').value.trim();
+    S.info.ruolo=document.getElementById('f-ruolo').value.trim();
+    S.info.esperienza=document.getElementById('f-esperienza').value.trim();
+    S.consenso=document.getElementById('f-consenso').checked;
+    const e=document.getElementById('data-err');
+    if(!S.info.teatro||!S.info.ruolo||!S.info.esperienza||!S.consenso){e.style.display='block';return;}
+    e.style.display='none';
+  }
+  if(S.screen===4){const e=document.getElementById('bw-err');if(S.best===-1||S.worst===-1||S.best===S.worst){e.style.display='block';return;}e.style.display='none';}
+  if(S.screen<TOTAL-1){S.screen++;render();}
+}
+render();
+</script>
+
+
+</body></html>
