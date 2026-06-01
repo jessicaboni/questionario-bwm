@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_27.html -->
+<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_29.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -258,10 +258,10 @@ const TOTAL=9;
 let S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},
   info:{teatro:'',ruolo:''},consenso:false,tStart:Date.now()};
 const FORM_ACTION='https://docs.google.com/forms/d/e/1FAIpQLSffHfpJW-Z5GF68YGxa0fLx5NbFmiTfhxdlTVbN9kdfUbH7XQ/formResponse';
-const FORM_FIELDS={nome:'entry.893010220',teatro:'entry.382483728',ruolo:'entry.892005640',
+const FORM_FIELDS={teatro:'entry.382483728',ruolo:'entry.892005640',
   ranking:'entry.2088025476',best:'entry.1055306693',worst:'entry.799534511',
   b2o:'entry.479085269',o2w:'entry.687423769',pesi:'entry.172011053',xi:'entry.376070899',
-  rankingBWM:'entry.1026636522',data:'entry.284503463',tempo:'entry.1158652575'};
+  rankingBWM:'entry.1026636522',scostamento:'entry.1695084977',data:'entry.284503463',tempo:'entry.1158652575'};
 let dragSrc=null;
 function getCrit(){return BC;}
 function mkProg(){return Array.from({length:TOTAL},(_,i)=>{let c='pdot';if(i<S.screen)c+=' done';else if(i===S.screen)c+=' active';return`<div class="${c}"></div>`;}).join('');}
@@ -350,6 +350,12 @@ function s7(){
   const intRank={};S.rankOrder.forEach((si,pos)=>{intRank[si]=pos+1});
   const bwmSorted=SEASONS.map((_,i)=>({si:i,score:S.scores[i]})).sort((a,b)=>b.score-a.score);
   const bwmRank={};bwmSorted.forEach((x,pos)=>{bwmRank[x.si]=pos+1});
+  // ── Scostamento tra ranking intuitivo e ranking BWM ──
+  const nSeas=SEASONS.length;
+  let nSpostate=0, sumD2=0;
+  SEASONS.forEach((_,si)=>{const d=intRank[si]-bwmRank[si]; if(d!==0)nSpostate++; sumD2+=d*d;});
+  const spearman=nSeas>1?(1-(6*sumD2)/(nSeas*(nSeas*nSeas-1))):1; // rho di Spearman
+  const scostamentoTxt=`${nSpostate} stagioni su ${nSeas} cambiano posizione; correlazione (Spearman) = ${spearman.toFixed(3)}`;
   const rows=S.rankOrder.map(si=>{const ir=intRank[si],br=bwmRank[si],df=ir-br;let arrow='—',cls='arrow-eq';if(df>0){arrow=`↑${df}`;cls='arrow-up';}else if(df<0){arrow=`↓${Math.abs(df)}`;cls='arrow-down';}return`<tr><td>${SEASONS[si]}</td><td><span class="rank-num ${ir===1?'rn-best':ir<=3?'rn-mid':'rn-low'}">${ir}</span></td><td><span class="rank-num ${br===1?'rn-best':br<=3?'rn-mid':'rn-low'}">${br}</span></td><td><span class="${cls}">${arrow}</span></td></tr>`;}).join('');
   // Soglie interpretative per xi* nel Linear BWM. Rezaei (2016) non pubblica una
   // tabella di soglie per xi^L, quindi queste sono euristiche pragmatiche: il
@@ -371,8 +377,9 @@ function s7(){
     b2o:cr.map((c,i)=>i===S.best?null:`${c.name}=${S.b2o[i]||1}`).filter(Boolean).join('; '),
     o2w:cr.map((c,i)=>i===S.worst?null:`${c.name}=${S.o2w[i]||1}`).filter(Boolean).join('; '),
     pesi:cr.map((c,i)=>`${c.name}=${(w[i]*100).toFixed(2)}%`).join('; '),
-    xi:xi.toFixed(4),
+    xi:`${xi.toFixed(4)} (${lbl.replace('Inconsistenza ','').toLowerCase()})`,
     rankingBWM:bwmSorted.map(x=>SEASONS[x.si]).join(' > '),
+    scostamento:scostamentoTxt,
     data:new Date().toLocaleString('it-IT'),
     tempo:Math.round((Date.now()-S.tStart)/1000)+' s'
   };
@@ -382,6 +389,7 @@ function s7(){
   <p class="sub">Di seguito trovi il confronto tra il ranking intuitivo che hai espresso in precedenza e il ranking calcolato dal Best-Worst Method sulla base dei pesi che hai assegnato ai criteri.</p>
   <div class="incons-box" style="background:${bg}"><div class="incons-dot" style="background:${dot}"></div><span style="font-size:13px;color:${tc}">Indice di inconsistenza ξ* = <strong>${xi.toFixed(4)}</strong> — ${lbl}</span></div>
   <div class="res-table-wrap"><table class="res-table"><thead><tr><th style="text-align:left">Stagione</th><th>Ranking intuitivo</th><th>Ranking BWM</th><th>Differenza</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="sub" style="font-size:13px;margin-top:-0.5rem"><strong>${nSpostate}</strong> stagioni su ${nSeas} cambiano posizione tra le due graduatorie · correlazione (Spearman) = <strong>${spearman.toFixed(3)}</strong></p>
   <div class="divider"></div><div class="result-title">Pesi dei criteri</div>
   ${DIMS.map((d,di)=>`<div class="cr-block"><div class="cr-block-title" style="color:var(--fg-3)"><i class="ti ${d.icon}" style="margin-right:4px"></i>${d.label}</div>${d.criteria.map((c,ci)=>{const idx=di*2+ci;const wv=w[idx]||0;return`<div class="w-bar"><div class="w-bar-top"><span>${c.name}</span><span style="font-weight:600">${(wv*100).toFixed(2)}%</span></div><div class="w-track"><div class="w-fill" style="width:${(wv/maxW*100).toFixed(1)}%;background:${barColor(wv)}"></div></div></div>`;}).join('')}</div>`).join('')}
   <div class="divider"></div>
@@ -401,6 +409,7 @@ function sendToForm(rec){
   data.append(FORM_FIELDS.pesi,rec.pesi);
   data.append(FORM_FIELDS.xi,rec.xi);
   data.append(FORM_FIELDS.rankingBWM,rec.rankingBWM);
+  data.append(FORM_FIELDS.scostamento,rec.scostamento);
   data.append(FORM_FIELDS.data,rec.data);
   data.append(FORM_FIELDS.tempo,rec.tempo);
   // Google Forms non consente lettura della risposta (CORS): invio no-cors.
