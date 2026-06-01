@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_19.html -->
+<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_27.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valutazione stagioni teatrali — BWM</title>
-<link rel="stylesheet" href="./Valutazione stagioni teatrali — BWM_files/tabler-icons.min.css">
+<link rel="stylesheet" href="./index_files/tabler-icons.min.css">
 <style>
 :root{
   /* ── Sfondi: avorio caldo, mai bianco puro ── */
@@ -175,15 +175,14 @@ tbody tr.drag-over{background:var(--drag-row);outline:2px solid var(--blue);outl
 .form-input::placeholder{color:var(--fg-3)}
 .consent-row{display:flex;align-items:flex-start;gap:10px;margin:1.2rem 0 .5rem;font-size:13px;color:var(--fg-2);line-height:1.5;cursor:pointer}
 .consent-row input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:var(--primary)}
-.btn-dl{display:inline-flex;align-items:center;gap:7px;background:var(--surface);color:var(--fg);border:1px solid var(--border);border-radius:8px;padding:10px 18px;font-size:13px;cursor:pointer}
-.btn-dl:hover{background:var(--bg-2)}
+
 .send-note{font-size:12px;margin-top:10px;display:flex;align-items:center;gap:6px}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <div class="progress" id="progress"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
-  <div id="screens"><div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><p class="sub" style="max-width:480px;margin:1rem auto 0;font-size:12px;color:var(--fg-3)">Le risposte saranno raccolte in forma anonima e utilizzate esclusivamente per finalità di ricerca.</p><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div></div>
+  <div id="screens"><div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div></div>
 </div>
 <div class="tooltip" id="tt"></div>
 <script>
@@ -257,10 +256,10 @@ const PERF=[
 ];
 const TOTAL=9;
 let S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},
-  info:{teatro:'',ruolo:'',esperienza:''},consenso:false,tStart:Date.now()};
+  info:{teatro:'',ruolo:''},consenso:false,tStart:Date.now()};
 const FORM_ACTION='https://docs.google.com/forms/d/e/1FAIpQLSffHfpJW-Z5GF68YGxa0fLx5NbFmiTfhxdlTVbN9kdfUbH7XQ/formResponse';
 const FORM_FIELDS={nome:'entry.893010220',teatro:'entry.382483728',ruolo:'entry.892005640',
-  esperienza:'entry.2087124831',ranking:'entry.2088025476',best:'entry.1055306693',worst:'entry.799534511',
+  ranking:'entry.2088025476',best:'entry.1055306693',worst:'entry.799534511',
   b2o:'entry.479085269',o2w:'entry.687423769',pesi:'entry.172011053',xi:'entry.376070899',
   rankingBWM:'entry.1026636522',data:'entry.284503463',tempo:'entry.1158652575'};
 let dragSrc=null;
@@ -279,15 +278,14 @@ function mkSlider(idx,val,color){const pct=((val-1)/8)*100;return`<div class="sl
 
 function sData(){return`<p class="tag">Prima di iniziare</p>
   <h2>Alcune informazioni sul teatro</h2>
-  <p class="sub">Le risposte saranno utilizzate esclusivamente per finalità di ricerca. I dati saranno trattati in forma riservata e presentati in modo aggregato nell'elaborato.</p>
+  <p class="sub">Le risposte saranno utilizzate esclusivamente per finalità di ricerca nell'ambito di questa tesi.</p>
   <div class="form-field"><label class="form-label">Tipo di teatro / organizzazione</label><input class="form-input" id="f-teatro" type="text" value="${S.info.teatro}" placeholder="Es. teatro di tradizione, stabile, fondazione..."></div>
   <div class="form-field"><label class="form-label">Ruolo</label><input class="form-input" id="f-ruolo" type="text" value="${S.info.ruolo}" placeholder="Es. direttore artistico, manager..."></div>
-  <div class="form-field"><label class="form-label">Anni di esperienza nel settore</label><input class="form-input" id="f-esperienza" type="text" value="${S.info.esperienza}" placeholder="Es. 12"></div>
   <label class="consent-row"><input type="checkbox" id="f-consenso" ${S.consenso?'checked':''}><span>Acconsento al trattamento dei dati forniti per finalità di ricerca nell'ambito di questa tesi.</span></label>
   <div id="data-err" class="err" style="display:none">Compila i campi obbligatori e fornisci il consenso per continuare.</div>
   ${nav()}`;}
 
-function s0(){return`<div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><p class="sub" style="max-width:480px;margin:1rem auto 0;font-size:12px;color:var(--fg-3)">Le risposte saranno raccolte in forma anonima e utilizzate esclusivamente per finalità di ricerca.</p><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div>`;}
+function s0(){return`<div style="padding:2rem 0;text-align:center"><p class="tag">Ricerca</p><h2 style="font-size:22px;margin-bottom:1rem">Modelli decisionali e valutazione delle stagioni teatrali</h2><p class="sub" style="max-width:480px;margin:0 auto 1.5rem">Questa intervista ha l'obiettivo di comprendere come i manager teatrali valutano e prioritizzano una stagione teatrale, con particolare attenzione all'importanza attribuita ai diversi criteri decisionali, confrontando il processo decisionale intuitivo con un approccio strutturato di analisi multicriterio basato sul Best-Worst Method (BWM).</p><div class="time-badge"><i class="ti ti-clock"></i> Tempo stimato: 15–20 minuti</div><div style="margin-top:1.5rem"><button class="btn-p" id="next-btn" style="padding:12px 36px;font-size:15px">Inizia →</button></div></div>`;}
 
 function s1(){return`<p class="tag">Passo 1 — I criteri</p>
   <h2>Criteri di valutazione</h2>
@@ -367,7 +365,7 @@ function s7(){
   // ── Record completo da inviare al Form e scaricare come backup ──
   const critNames=cr.map(c=>c.name);
   const rec={
-    teatro:S.info.teatro, ruolo:S.info.ruolo, esperienza:S.info.esperienza,
+    teatro:S.info.teatro, ruolo:S.info.ruolo,
     ranking:S.rankOrder.map(si=>SEASONS[si]).join(' > '),
     best:critNames[S.best]||'', worst:critNames[S.worst]||'',
     b2o:cr.map((c,i)=>i===S.best?null:`${c.name}=${S.b2o[i]||1}`).filter(Boolean).join('; '),
@@ -388,15 +386,13 @@ function s7(){
   ${DIMS.map((d,di)=>`<div class="cr-block"><div class="cr-block-title" style="color:var(--fg-3)"><i class="ti ${d.icon}" style="margin-right:4px"></i>${d.label}</div>${d.criteria.map((c,ci)=>{const idx=di*2+ci;const wv=w[idx]||0;return`<div class="w-bar"><div class="w-bar-top"><span>${c.name}</span><span style="font-weight:600">${(wv*100).toFixed(2)}%</span></div><div class="w-track"><div class="w-fill" style="width:${(wv/maxW*100).toFixed(1)}%;background:${barColor(wv)}"></div></div></div>`;}).join('')}</div>`).join('')}
   <div class="divider"></div>
   <div class="send-note" id="send-status" style="color:var(--fg-3)"><i class="ti ti-loader"></i> Invio delle risposte in corso…</div>
-  <p class="sub" style="font-size:12px;margin:8px 0 12px">Se l'invio automatico non andasse a buon fine, puoi scaricare le tue risposte e inviarle al ricercatore.</p>
-  <div class="nav"><button class="btn-dl" id="dl-btn"><i class="ti ti-download"></i> Scarica le mie risposte</button><button class="btn-s" id="restart-btn">Ricomincia</button></div>`;
+  <div class="nav"><div></div><button class="btn-s" id="restart-btn">Ricomincia</button></div>`;
 }
 
 function sendToForm(rec){
   const data=new FormData();
   data.append(FORM_FIELDS.teatro,rec.teatro);
   data.append(FORM_FIELDS.ruolo,rec.ruolo);
-  data.append(FORM_FIELDS.esperienza,rec.esperienza);
   data.append(FORM_FIELDS.ranking,rec.ranking);
   data.append(FORM_FIELDS.best,rec.best);
   data.append(FORM_FIELDS.worst,rec.worst);
@@ -415,24 +411,7 @@ function sendToForm(rec){
 function updateSendStatus(ok){
   const el=document.getElementById('send-status');if(!el)return;
   if(ok){el.style.color='var(--green-fg)';el.innerHTML='<i class="ti ti-circle-check"></i> Risposte inviate. Grazie per la partecipazione!';}
-  else{el.style.color='var(--red-fg)';el.innerHTML='<i class="ti ti-alert-circle"></i> Invio automatico non riuscito: scarica le risposte e inviale al ricercatore.';}
-}
-function downloadRecord(){
-  const r=S._record;if(!r)return;
-  const lines=[
-    'QUESTIONARIO BWM — STAGIONI TEATRALI','',
-    'Tipo di teatro: '+r.teatro,'Ruolo: '+r.ruolo,'Anni di esperienza: '+r.esperienza,'',
-    'Ranking intuitivo: '+r.ranking,'Criterio Best: '+r.best,'Criterio Worst: '+r.worst,'',
-    'Confronti Best-to-Others: '+r.b2o,'Confronti Others-to-Worst: '+r.o2w,'',
-    'Pesi finali: '+r.pesi,'Indice di inconsistenza xi*: '+r.xi,'Ranking BWM: '+r.rankingBWM,'',
-    'Data e ora: '+r.data,'Tempo di compilazione: '+r.tempo
-  ];
-  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url; a.download='risposte_bwm_'+Date.now()+'.txt';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  else{el.style.color='var(--red-fg)';el.innerHTML='<i class="ti ti-alert-circle"></i> Invio automatico non riuscito. Contatta il ricercatore per registrare le risposte.';}
 }
 function getScreen(i){return[s0,sData,s1,s2,s3,s4,s5,s6,s7][i]();}
 function render(){document.getElementById('progress').innerHTML=mkProg();document.getElementById('screens').innerHTML=getScreen(S.screen);if(S.screen===3){renderRows();bindHeaderTooltips();}if(S.screen===7)animateLoading();bindEvents();}
@@ -461,8 +440,7 @@ function bindSliders(){
 function bindEvents(){
   document.getElementById('next-btn')?.addEventListener('click',goNext);
   document.getElementById('prev-btn')?.addEventListener('click',()=>{S.screen--;render();});
-  document.getElementById('restart-btn')?.addEventListener('click',()=>{S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},info:{teatro:'',ruolo:'',esperienza:''},consenso:false,tStart:Date.now()};render();});
-  document.getElementById('dl-btn')?.addEventListener('click',downloadRecord);
+  document.getElementById('restart-btn')?.addEventListener('click',()=>{S={screen:0,rankOrder:SEASONS.map((_,i)=>i),best:-1,worst:-1,b2o:{},o2w:{},weights:{},scores:{},info:{teatro:'',ruolo:''},consenso:false,tStart:Date.now()};render();});
   document.querySelectorAll('.crit-header').forEach(h=>h.addEventListener('click',()=>{const i=+h.dataset.ci;document.getElementById(`det-${i}`).classList.toggle('open');document.getElementById(`tog-${i}`).classList.toggle('open');}));
   document.querySelectorAll('.bw-card').forEach(card=>{card.addEventListener('click',()=>{const i=+card.dataset.ci;if(S.best===i)S.best=-1;else if(S.worst===i)S.worst=-1;else if(S.best===-1)S.best=i;else if(S.worst===-1)S.worst=i;else S.best=i;updateBW();});});
   if(S.screen===5||S.screen===6)bindSliders();
@@ -472,10 +450,9 @@ function goNext(){
   if(S.screen===1){ // schermata dati intervistato
     S.info.teatro=document.getElementById('f-teatro').value.trim();
     S.info.ruolo=document.getElementById('f-ruolo').value.trim();
-    S.info.esperienza=document.getElementById('f-esperienza').value.trim();
     S.consenso=document.getElementById('f-consenso').checked;
     const e=document.getElementById('data-err');
-    if(!S.info.teatro||!S.info.ruolo||!S.info.esperienza||!S.consenso){e.style.display='block';return;}
+    if(!S.info.teatro||!S.info.ruolo||!S.consenso){e.style.display='block';return;}
     e.style.display='none';
   }
   if(S.screen===4){const e=document.getElementById('bw-err');if(S.best===-1||S.worst===-1||S.best===S.worst){e.style.display='block';return;}e.style.display='none';}
