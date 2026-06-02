@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_30.html -->
+<!-- saved from url=(0068)file:///C:/Users/Jessica/Downloads/questionario_bwm_teatrale_31.html -->
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -352,10 +352,9 @@ function s7(){
   const bwmRank={};bwmSorted.forEach((x,pos)=>{bwmRank[x.si]=pos+1});
   // ── Scostamento tra ranking intuitivo e ranking BWM ──
   const nSeas=SEASONS.length;
-  let nSpostate=0, sumD2=0;
-  SEASONS.forEach((_,si)=>{const d=intRank[si]-bwmRank[si]; if(d!==0)nSpostate++; sumD2+=d*d;});
-  const spearman=nSeas>1?(1-(6*sumD2)/(nSeas*(nSeas*nSeas-1))):1; // rho di Spearman
-  const scostamentoTxt=`${nSpostate} stagioni su ${nSeas} cambiano posizione; correlazione (Spearman) = ${spearman.toFixed(3)}`;
+  let nSpostate=0;
+  SEASONS.forEach((_,si)=>{if(intRank[si]!==bwmRank[si])nSpostate++;});
+  const scostamentoTxt=`${nSpostate} stagioni su ${nSeas} cambiano posizione`;
   const rows=S.rankOrder.map(si=>{const ir=intRank[si],br=bwmRank[si],df=ir-br;let arrow='—',cls='arrow-eq';if(df>0){arrow=`↑${df}`;cls='arrow-up';}else if(df<0){arrow=`↓${Math.abs(df)}`;cls='arrow-down';}return`<tr><td>${SEASONS[si]}</td><td><span class="rank-num ${ir===1?'rn-best':ir<=3?'rn-mid':'rn-low'}">${ir}</span></td><td><span class="rank-num ${br===1?'rn-best':br<=3?'rn-mid':'rn-low'}">${br}</span></td><td><span class="${cls}">${arrow}</span></td></tr>`;}).join('');
   // Soglie interpretative per xi* nel Linear BWM. Rezaei (2016) non pubblica una
   // tabella di soglie per xi^L, quindi queste sono euristiche pragmatiche: il
